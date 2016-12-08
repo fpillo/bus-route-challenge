@@ -15,6 +15,7 @@ public class StationBusRouteMap {
         }
         map.get(station).add(busRoute);
         busRoutes.add(busRoute);
+        busRoute.addStation(station);
     }
 
     public Collection<BusRoute> findBusRouteByStation(final Station station) {

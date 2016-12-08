@@ -117,4 +117,49 @@ public class LoadStationBusRouteMapTest {
         Assert.isTrue(!map.hasStation(new Station(7)));
     }
 
+    @Test
+    public void test_load_duplicate_busroute() {
+        final String path = LoadStationBusRouteMapTest.class.getClassLoader().getResource("file_duplicate_busroute.txt").getPath();
+
+        final Limits limits = new Limits();
+        limits.setMaxbusroute(4);
+        limits.setMaxstation(9);
+        limits.setMaxstationbyroute(5);
+
+        final StationBusRouteMap map = new LoadStationBusRouteMap(new StationBusRouteMapGatewayImpl(limits)).load(path);
+
+        Assert.isTrue(map.stationQty() == 7);
+        Assert.isTrue(map.hasStation(new Station(0)));
+        Assert.isTrue(map.hasStation(new Station(1)));
+        Assert.isTrue(map.hasStation(new Station(2)));
+        Assert.isTrue(map.hasStation(new Station(3)));
+        Assert.isTrue(map.hasStation(new Station(4)));
+        Assert.isTrue(!map.hasStation(new Station(5)));
+        Assert.isTrue(map.hasStation(new Station(6)));
+        Assert.isTrue(map.hasStation(new Station(7)));
+        Assert.isTrue(!map.hasStation(new Station(8)));
+    }
+
+    @Test
+    public void test_load_duplicate_station_in_same_busroute() {
+        final String path = LoadStationBusRouteMapTest.class.getClassLoader().getResource("file_duplicate_station_in_same_busroute.txt").getPath();
+
+        final Limits limits = new Limits();
+        limits.setMaxbusroute(3);
+        limits.setMaxstation(8);
+        limits.setMaxstationbyroute(5);
+
+        final StationBusRouteMap map = new LoadStationBusRouteMap(new StationBusRouteMapGatewayImpl(limits)).load(path);
+
+        Assert.isTrue(map.stationQty() == 7);
+        Assert.isTrue(map.hasStation(new Station(0)));
+        Assert.isTrue(map.hasStation(new Station(1)));
+        Assert.isTrue(map.hasStation(new Station(2)));
+        Assert.isTrue(map.hasStation(new Station(3)));
+        Assert.isTrue(!map.hasStation(new Station(4)));
+        Assert.isTrue(map.hasStation(new Station(5)));
+        Assert.isTrue(map.hasStation(new Station(6)));
+        Assert.isTrue(map.hasStation(new Station(7)));
+    }
+
 }

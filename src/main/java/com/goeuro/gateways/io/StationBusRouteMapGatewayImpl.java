@@ -39,14 +39,12 @@ public class StationBusRouteMapGatewayImpl implements StationBusRouteMapGateway 
         }
 
         try {
-            final Integer limit = extract(lineIterator);
+            final Integer maxBusRouteQty = getMaxBusRouteQty(lineIterator);
 
-            while (lineIterator.hasNext() && map.busRouteQty() < limits.getMaxbusroute()) {
+            while (lineIterator.hasNext() && map.busRouteQty() < maxBusRouteQty) {
                 final List<Integer> stationIds = castToIntegerList(lineIterator);
                 final BusRoute busRoute = extractBusRoute(stationIds);
-                if (!map.hasBusRoute(busRoute)) {
-                    addBusRouteInStation(map, busRoute, removeDuplicates(stationIds));
-                }
+                addBusRouteInStation(map, busRoute, removeDuplicates(stationIds));
             }
         } finally {
             LineIterator.closeQuietly(lineIterator);
@@ -55,8 +53,9 @@ public class StationBusRouteMapGatewayImpl implements StationBusRouteMapGateway 
         return map;
     }
 
-    private Integer extract(final LineIterator lineIterator) {
-        return Integer.valueOf(lineIterator.nextLine());
+    private Integer getMaxBusRouteQty(final LineIterator lineIterator) {
+        final Integer max = Integer.valueOf(lineIterator.nextLine());
+        return max <= limits.getMaxbusroute() ? max : limits.getMaxbusroute();
     }
 
     private List<Integer> castToIntegerList(final LineIterator lineIterator) {
@@ -74,16 +73,14 @@ public class StationBusRouteMapGatewayImpl implements StationBusRouteMapGateway 
         return stationIds.parallelStream().distinct().collect(Collectors.toList());
     }
 
-    private boolean addBusRouteInStation(final StationBusRouteMap map, final BusRoute busRoute, final List<Integer> stationIds) {
-        Integer count = 0;
-        if (stationIds.size() > 1) {
-            while (count < stationIds.size() && count < limits.getMaxstationbyroute() && map.stationQty() < limits.getMaxstation()) {
-                final Station station = new Station(stationIds.get(count));
-                map.put(station, busRoute);
-                count++;
-            }
+    private void addBusRouteInStation(final StationBusRouteMap map, final BusRoute busRoute, final List<Integer> stationIds) {
+        if (stationIds.size() > 1 && !map.hasBusRoute(busRoute)) {
+            stationIds.forEach(id -> {
+                if (busRoute.visitedStationQty() < limits.getMaxstationbyroute() && map.stationQty() < limits.getMaxstation()) {
+                    map.put(new Station(id), busRoute);
+                }
+            });
         }
-        return count > 0;
     }
 
 }
