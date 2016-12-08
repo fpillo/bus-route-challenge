@@ -1,0 +1,6 @@
+server.port: 8088
+
+limits:
+  maxbusroute: 100000
+  maxstation: 1000000
+  maxstationbyroute: 1000
