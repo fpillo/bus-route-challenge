@@ -4,6 +4,7 @@ import com.goeuro.domains.StationBusRouteMap;
 import com.goeuro.usecases.LoadStationBusRouteMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,14 +14,18 @@ public class MapLoader {
 
     private final LoadStationBusRouteMap loadStationBusRouteMap;
 
+    private final String path;
+
     @Autowired
-    public MapLoader(final LoadStationBusRouteMap loadStationBusRouteMap) {
+    public MapLoader(final LoadStationBusRouteMap loadStationBusRouteMap, @Value("${path}") final String path) {
+        log.info("path: {}", path);
         this.loadStationBusRouteMap = loadStationBusRouteMap;
+        this.path = path;
     }
 
     @Bean
     public StationBusRouteMap loadMap() {
-        return loadStationBusRouteMap.load("/Users/fernando.lucia/bus-route-challenge/src/main/resources/file.txt");
+        return loadStationBusRouteMap.load(path);
     }
 
 }
