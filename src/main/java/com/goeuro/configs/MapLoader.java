@@ -18,7 +18,7 @@ public class MapLoader {
 
     @Autowired
     public MapLoader(final LoadStationBusRouteMap loadStationBusRouteMap, @Value("${path}") final String path) {
-        log.info("Starting loading file: {}", path);
+        log.info("Loading file: {}", path);
         this.loadStationBusRouteMap = loadStationBusRouteMap;
         this.path = path;
     }

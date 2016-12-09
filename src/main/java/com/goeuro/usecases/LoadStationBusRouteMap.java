@@ -18,6 +18,7 @@ public class LoadStationBusRouteMap {
     }
 
     public StationBusRouteMap load(final String path) {
+        log.info("Loading StationBusRoute using file: {}", path);
         return stationBusRouteMapGateway.load(path);
     }
 

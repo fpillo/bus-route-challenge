@@ -4,12 +4,14 @@ package com.goeuro.usecases;
 import com.goeuro.domains.BusRoute;
 import com.goeuro.domains.Station;
 import com.goeuro.domains.StationBusRouteMap;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class FindBusRouteByStations {
 
@@ -21,6 +23,7 @@ public class FindBusRouteByStations {
     }
 
     public Collection<BusRoute> find(final Station from, final Station to) {
+        log.info("Searching for direct connections from: {}, to: {}", from, to);
         final Collection<BusRoute> fromRoutes = stationBusRouteMap.findBusRouteByStation(from);
         final Collection<BusRoute> toRoutes = stationBusRouteMap.findBusRouteByStation(to);
 

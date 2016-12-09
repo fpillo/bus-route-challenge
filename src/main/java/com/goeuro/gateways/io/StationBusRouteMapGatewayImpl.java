@@ -48,9 +48,8 @@ public class StationBusRouteMapGatewayImpl implements StationBusRouteMapGateway 
             }
         } finally {
             LineIterator.closeQuietly(lineIterator);
+            return map;
         }
-
-        return map;
     }
 
     private Integer getMaxBusRouteQty(final LineIterator lineIterator) {
